@@ -15,6 +15,11 @@ type JSONStreamParser struct {
 	source io.Reader
 }
 
+// NewJSONStreamParser returns a pointer to a new JSONStreamParser.
+func NewJSONStreamParser() *JSONStreamParser {
+	return &JSONStreamParser{}
+}
+
 // ObjectProperties reads the properties of the JSON object one by one and passes their values to the supplied
 // JSONDataHandler function. Returns an error when the data in the source is not a JSON object.
 func (p *JSONStreamParser) ObjectProperties(source io.Reader, dataHandler JSONDataHandler) error {
