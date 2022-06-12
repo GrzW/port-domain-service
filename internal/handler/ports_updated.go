@@ -53,8 +53,9 @@ func (puh *PortsUpdatedHandler) HandlePortsUpdated(ctx context.Context, fileURL 
 		defer close(errors)
 		defer close(ports)
 
-		if err = puh.parser.ObjectProperties(resp.Body, getJSONDataHandler(ctx, ports)); err != nil {
-			errors <- err
+		// re-using existing err could lead to race condition
+		if opErr := puh.parser.ObjectProperties(resp.Body, getJSONDataHandler(ctx, ports)); opErr != nil {
+			errors <- opErr
 		}
 	}()
 
@@ -65,8 +66,9 @@ func (puh *PortsUpdatedHandler) HandlePortsUpdated(ctx context.Context, fileURL 
 				return nil
 			}
 
-			if err = puh.store.Put(port.ID, port); err != nil {
-				fmt.Printf("Warning: failed to save port %q data: %s", port.ID, err.Error())
+			// re-using existing err could lead to race condition
+			if putError := puh.store.Put(port.ID, port); putError != nil {
+				fmt.Printf("Warning: failed to save port %q data: %s", port.ID, putError.Error())
 			}
 		case err = <-errors:
 			if err != nil {
