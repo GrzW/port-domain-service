@@ -9,6 +9,6 @@ COPY .env .
 RUN go get -d -v ./...
 RUN go install -v ./...
 
-RUN cd cmd && go build -o ../service && cd ../
+RUN cd cmd && go build -o /port-domain-service && cd ../
 
-CMD [ "cmd" ]
+CMD [ "/port-domain-service" ]

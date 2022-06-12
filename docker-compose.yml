@@ -1,0 +1,30 @@
+version: '2'
+services:
+  app:
+    container_name: port_domain_service_container
+    environment:
+      - SERVICE_PORT=${SERVICE_PORT}
+    tty: true
+    build: .
+    restart: on-failure
+    ports:
+      - "8088:8088"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgresdb
+    networks:
+      - port_domain_service_network
+
+  postgresdb:
+    image: postgres:latest
+    container_name: port_domain_service_postgres_container
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - port_domain_service_network
+
+networks:
+  port_domain_service_network:
+    driver: bridge
