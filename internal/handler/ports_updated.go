@@ -65,8 +65,8 @@ func (puh *PortsUpdatedHandler) HandlePortsUpdated(ctx context.Context, fileURL 
 				return nil
 			}
 
-			if err = puh.store.Put(port.Name, port); err != nil {
-				fmt.Printf("Warning: failed to save port %q data: %s", port.Name, err.Error())
+			if err = puh.store.Put(port.ID, port); err != nil {
+				fmt.Printf("Warning: failed to save port %q data: %s", port.ID, err.Error())
 			}
 		case err = <-errors:
 			if err != nil {
@@ -79,12 +79,14 @@ func (puh *PortsUpdatedHandler) HandlePortsUpdated(ctx context.Context, fileURL 
 func getJSONDataHandler(ctx context.Context, ports chan storage.Port) parser.JSONDataHandler {
 	var data storage.Port
 
-	return func(decoder *json.Decoder, property json.Token) error {
+	return func(decoder *json.Decoder, propertyName json.Token) error {
 		if err := decoder.Decode(&data); err != nil {
-			fmt.Printf("Failed to decode %q: %s", fmt.Sprint(property), err.Error())
+			fmt.Printf("Failed to decode %q: %s", fmt.Sprint(propertyName), err.Error())
 
 			return nil
 		}
+
+		data.ID = fmt.Sprint(propertyName)
 
 		select {
 		case <-ctx.Done():
