@@ -8,6 +8,14 @@ type MemoryDB struct {
 	mx *sync.Mutex
 }
 
+// NewMemoryDB returns a pointer to a new MemoryDB.
+func NewMemoryDB() *MemoryDB {
+	return &MemoryDB{
+		db: make(map[string]interface{}),
+		mx: &sync.Mutex{},
+	}
+}
+
 // Write saves key-document pair in MemoryDB.
 func (m *MemoryDB) Write(key string, document interface{}) error {
 	m.mx.Lock()

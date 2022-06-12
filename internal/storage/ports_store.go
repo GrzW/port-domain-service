@@ -13,6 +13,11 @@ type PortsStore struct {
 	dw DocumentWriter
 }
 
+// NewPortsStore returns a pointer to a new PortsStore.
+func NewPortsStore(dw DocumentWriter) *PortsStore {
+	return &PortsStore{dw: dw}
+}
+
 // Put saves key-port data pair in a database, creates new documents and overwrites existing ones.
 func (p *PortsStore) Put(key string, port Port) error {
 	if err := p.dw.Write(key, port); err != nil {
