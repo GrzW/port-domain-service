@@ -1,7 +1,7 @@
 # PortDomainService
-The PortDomainService is a service that provides an HTTP endpoint which accepts link URI to a port file to be imported
-into the database. Due to the potentially long processing time for large files, the response to the client is sent back
-before the data is processed - all work is done asynchronously.
+The PortDomainService provides an HTTP endpoint that accepts a URI of a file with port data in JSON to be imported into
+a database. Due to the potentially long processing time for large files, the response to the client is sent back before
+the data is processed - all work is done asynchronously.
 
 Endpoint is available at `/ports`, and accepts data as a JSON object:
 
